@@ -48,16 +48,19 @@ export default function Projects() {
         <div className="main" id="opensource">
           <h1 className="project-title">Open Source Projects</h1>
           <div className="repo-cards-div-main">
-            {repo.map((v, i) => {
-              if (!v) {
-                console.error(
-                  `Github Object for repository number : ${i} is undefined`
-                );
-              }
-              return (
+            {repo
+              .filter(v => v && v.node)
+              .map(v => (
                 <GithubRepoCard repo={v} key={v.node.id} isDark={isDark} />
-              );
-            })}
+              ))}
+            {repo.length > 0 && repo.filter(v => v && v.node).length === 0 && (
+              <p>
+                Couldn't load pinned repos from GitHub. Check that your token is
+                a <b>classic</b> PAT with <code>repo</code> +{" "}
+                <code>read:user</code> scopes (fine-grained tokens are blocked
+                from the <code>stargazers</code> field).
+              </p>
+            )}
           </div>
           <Button
             text={"More Projects"}
